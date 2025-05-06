@@ -2245,16 +2245,24 @@ yyreturn:
 #line 534 "analisador.y"
 
 
+#include <sstream>
 #include <string>
 #include <iostream>
 extern void yy_scan_string(const char*);
 
+// Função principal com suporte a múltiplas linhas
 int main() {
-    std::string linha;
-    std::cout << "Digite sua entrada:\n";
-    std::getline(std::cin, linha);
+    std::cout << "Digite sua entrada (Ctrl+D para finalizar):\n";
 
-    yy_scan_string(linha.c_str());
+    std::ostringstream oss;
+    std::string linha;
+
+    while (std::getline(std::cin, linha)) {
+        oss << linha << '\n';
+    }
+
+    std::string codigo = oss.str();
+    yy_scan_string(codigo.c_str());
     yyparse();
 
     std::cout << "Código Intermediário:\n";
@@ -2270,9 +2278,12 @@ int main() {
     return 0;
 }
 
-int yyerror(const char *s) {
+// Definição correta da função yyerror
+int yyerror(const char* s) {
+    std::cerr << "Erro de sintaxe: " << s << std::endl;
     return 1;
 }
+
 
 
 
