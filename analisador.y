@@ -102,7 +102,12 @@ entrada:
 comando:
     declaracao
   | atribuicao
+  | expr ';' {
+        // Apenas avalia a expressão, sem atribuição
+        // Garante que o código intermediário seja gerado
+    }
 ;
+
 
 declaracao:
     INT ID ';' {
